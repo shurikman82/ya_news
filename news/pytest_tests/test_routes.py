@@ -6,7 +6,6 @@ from django.urls import reverse
 
 from pytest_django.asserts import assertRedirects
 
-from news.models import Comment, News
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
@@ -17,9 +16,7 @@ from news.models import Comment, News
      'users:signup',)
 
 )
-# Указываем в фикстурах встроенный клиент.
 def test_page_availability(client, name):
-    # Адрес страницы получаем через reverse():
     url = reverse(name)
     response = client.get(url)
     assert response.status_code == HTTPStatus.OK
@@ -54,10 +51,8 @@ def test_availability_for_comment_edit_and_delete(
 @pytest.mark.parametrize(
     'name', ('news:edit', 'news:delete')
     )
-# Передаём в тест анонимный клиент, name проверяемых страниц и args:
 def test_redirect_for_anonymous_client(client, name, news):
     login_url = reverse('users:login')
-    # Теперь не надо писать никаких if и можно обойтись одним выражением.
     url = reverse(name, args=(news.id,))
     expected_url = f'{login_url}?next={url}'
     response = client.get(url)

@@ -1,24 +1,26 @@
 import pytest
+
 from datetime import datetime, timedelta
+
 from django.conf import settings
+
 from news.models import Comment, News
 
 
 @pytest.fixture
-# Используем встроенную фикстуру для модели пользователей django_user_model.
 def author(django_user_model):
     return django_user_model.objects.create(username='Автор')
 
 
 @pytest.fixture
-def author_client(author, client):  # Вызываем фикстуру автора и клиента.
-    client.force_login(author)  # Логиним автора в клиенте.
+def author_client(author, client):
+    client.force_login(author)
     return client
 
 
 @pytest.fixture
 def news(author):
-    news = News.objects.create(  # Создаём объект заметки.
+    news = News.objects.create(
         title='Заголовок',
         text='Текст новости',
     )
@@ -30,6 +32,7 @@ def form_data():
     return {
         'text': 'Новый текст',
     }
+
 
 @pytest.fixture
 def comment(author, news):
